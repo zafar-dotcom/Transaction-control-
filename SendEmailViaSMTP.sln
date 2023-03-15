@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendEmailViaSMTP", "SendEmailViaSMTP.csproj", "{906E7047-9E85-4DC4-A853-7256FC0B21E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailViaSMTP", "SendEmailViaSMTP.csproj", "{906E7047-9E85-4DC4-A853-7256FC0B21E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "..\UnitTest\UnitTest.csproj", "{7B482ED4-DB55-4D94-AD5F-3102D4D11DED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{906E7047-9E85-4DC4-A853-7256FC0B21E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{906E7047-9E85-4DC4-A853-7256FC0B21E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{906E7047-9E85-4DC4-A853-7256FC0B21E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B482ED4-DB55-4D94-AD5F-3102D4D11DED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B482ED4-DB55-4D94-AD5F-3102D4D11DED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B482ED4-DB55-4D94-AD5F-3102D4D11DED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B482ED4-DB55-4D94-AD5F-3102D4D11DED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

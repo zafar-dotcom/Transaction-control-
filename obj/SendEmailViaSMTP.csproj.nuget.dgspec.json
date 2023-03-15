@@ -39,6 +39,20 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.5.0, )"
+            },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.32.1, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.4.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

@@ -1,7 +1,12 @@
+using MySql.Data.MySqlClient;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var services = builder.Services;
+services.AddTransient<MySqlConnection>(_ =>
+    new MySqlConnection(builder.Configuration.GetConnectionString("Constr")));
 
 var app = builder.Build();
 
