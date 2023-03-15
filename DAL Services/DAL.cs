@@ -26,6 +26,7 @@ namespace SendEmailViaSMTP.DAL_Services
             cmd.CommandText = "sp_display_user";
             dr = cmd.ExecuteReader();
             tbl.Load(dr);
+            con.Close();
             foreach (DataRow dar in tbl.Rows)
             {
                 lst.Add(new UserModel
@@ -110,10 +111,11 @@ namespace SendEmailViaSMTP.DAL_Services
             cmd.Connection = conn;
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_delete_user";
-            cmd.Parameters.AddWithValue("_id", id);
+            cmd.Parameters.AddWithValue("_id",id);
             try
             {
                 int i = cmd.ExecuteNonQuery();
+                conn.Close();
                 if (i > 0) return true;
                 else
                     return false;
