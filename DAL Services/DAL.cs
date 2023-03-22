@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using SendEmailViaSMTP.Models;
 using System.Data;
+using System.Transactions;
 
 namespace SendEmailViaSMTP.DAL_Services
 {
@@ -13,6 +14,68 @@ namespace SendEmailViaSMTP.DAL_Services
         //}
 
         private readonly string str = "server=localhost;port=3306;uid=root;pwd=sobiazafar@2023;database=mvc_crud";
+        
+        public bool TransactionScope()
+        {
+            using (var txscope = new TransactionScope(TransactionScopeOption.RequiresNew))
+            {
+                try
+                {
+                    using (MySqlConnection objConn = new MySqlConnection(str))
+                    {
+                        objConn.Open();
+                        MySqlCommand objCmd1 = new MySqlCommand("insert into tblProject values(6, 'TestProject')", objConn);
+                        MySqlCommand objCmd2 = new MySqlCommand("insert into tblProjectMember(MemberID, ProjectID) values(2, 6)", objConn);
+
+                        objCmd1.ExecuteNonQuery();
+                        objCmd2.ExecuteNonQuery(); // Throws exception due to foreign key constraint    
+
+                        //The Transaction will be completed      
+                        txscope.Complete();
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error      
+                    txscope.Dispose();
+                    return false;
+                }
+            }
+        }
+        public bool BeginTransaction()
+        {
+           
+            MySqlTransaction objTrans = null;
+
+            using (MySqlConnection objConn = new MySqlConnection(str))
+            {
+                objConn.Open();
+                objTrans = objConn.BeginTransaction();
+                MySqlCommand objCmd1 = new MySqlCommand("insert into tblProject values(7, 'beginfrom')", objConn);
+                MySqlCommand objCmd2 = new MySqlCommand("insert into tblProjectMember(MemberID, ProjectID) values(9, 7)", objConn);
+                try
+                {
+                    objCmd1.ExecuteNonQuery();
+                    objCmd2.ExecuteNonQuery(); // Throws exception due to foreign key constraint   
+                    objTrans.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    objTrans.Rollback();
+                    return false;
+                }
+                finally
+                {
+                    objConn.Close();
+                }
+            }
+
+        }
+        
+        
+        
         public List<UserModel> GetEmployee()
         {
             List<UserModel> lst = new List<UserModel>();
