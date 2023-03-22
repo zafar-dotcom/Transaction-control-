@@ -15,7 +15,7 @@ namespace SendEmailViaSMTP.DAL_Services
 
         private readonly string str = "server=localhost;port=3306;uid=root;pwd=sobiazafar@2023;database=mvc_crud";
         
-        public bool TransactionScope()
+        public bool TransactionScope(TransactionModel mdl)
         {
             using (var txscope = new TransactionScope(TransactionScopeOption.RequiresNew))
             {
@@ -24,11 +24,36 @@ namespace SendEmailViaSMTP.DAL_Services
                     using (MySqlConnection objConn = new MySqlConnection(str))
                     {
                         objConn.Open();
-                        MySqlCommand objCmd1 = new MySqlCommand("insert into tblProject values(6, 'TestProject')", objConn);
-                        MySqlCommand objCmd2 = new MySqlCommand("insert into tblProjectMember(MemberID, ProjectID) values(2, 6)", objConn);
+                       // string query1 = "insert into Applicant(ProjectID,Name) values (LAST_INSERT_ID(),@name)";
+                        //string query2 = "insert into tblProjectMember(MemberID,ProjectID) values(@mid,@pid)";
+                        string query1 = "insert into Applicant(name,gender,age,qualificaion,total_experience) values (@name,@gender,@age,@qualificaion,@total_experience)";
+                        string query2 = "insert into experience(company_name,designation,years_worked,app_id) values(@company_name,@designation,@years_worked,@app_id)";
 
-                        objCmd1.ExecuteNonQuery();
-                        objCmd2.ExecuteNonQuery(); // Throws exception due to foreign key constraint    
+                        MySqlCommand cmd1 = new MySqlCommand(query1, objConn);
+                        // cmd1.Parameters.AddWithValue("@name", mdl.Name);
+                        cmd1.Parameters.AddWithValue("@name", mdl.Name);
+                        cmd1.Parameters.AddWithValue("@gender", mdl.Gender);
+                        cmd1.Parameters.AddWithValue("@age", mdl.Age);
+                        cmd1.Parameters.AddWithValue("@qualificaion", mdl.Qualificaion);
+                        cmd1.Parameters.AddWithValue("@total_experience", mdl.Total_Experience);
+                        cmd1.ExecuteNonQuery();
+                        long  appid= cmd1.LastInsertedId;
+                       
+                        foreach(var experience in mdl.Experiences)
+                        {
+                            MySqlCommand cmd2 = new MySqlCommand(query2, objConn);
+                            cmd2.Parameters.AddWithValue("@company_name", experience.company_name);
+                            cmd2.Parameters.AddWithValue("@designation", experience.designation);
+                            cmd2.Parameters.AddWithValue("@years_worked", experience.years_worked);
+                            cmd2.Parameters.AddWithValue("@app_id", appid);
+                            cmd2.ExecuteNonQuery();
+
+                        }
+                        // cmd1.Parameters.AddWithValue("_id", mdl.ProjectID);      
+                       // cmd2.Parameters.AddWithValue("@mid", mdl.MemberID);
+                      //  cmd2.Parameters.AddWithValue("@pid",lastinsertedid);
+                       // cmd1.ExecuteNonQuery();
+                       // cmd2.ExecuteNonQuery(); // Throws exception due to foreign key constraint    
 
                         //The Transaction will be completed      
                         txscope.Complete();

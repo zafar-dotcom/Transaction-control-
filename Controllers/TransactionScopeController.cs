@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SendEmailViaSMTP.DAL_Services;
+using SendEmailViaSMTP.Models;
 
 namespace SendEmailViaSMTP.Controllers
 {
@@ -9,12 +10,13 @@ namespace SendEmailViaSMTP.Controllers
     public class TransactionScopeController : ControllerBase
     {
         [Route("transaction")]
-        public IActionResult Transaction()
+        [HttpPost]
+        public IActionResult Transaction([FromBody] TransactionModel modl)
         {
             DAL obj = new DAL();
-            if (obj.TransactionScope())
+            if (obj.TransactionScope(modl))
             {
-                obj.BeginTransaction();
+              //  obj.BeginTransaction();
                 return Ok();
 
             }
