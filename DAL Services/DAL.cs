@@ -134,5 +134,37 @@ namespace SendEmailViaSMTP.DAL_Services
         {
             return a + b;
         }
+        public bool CheckDuplication(UserModel user)
+        {
+            using(MySqlConnection conn=new MySqlConnection(str))
+            {
+                conn.Open();
+                using(MySqlCommand cmd=new MySqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "Duplicacy";
+                    cmd.Parameters.AddWithValue("_id", user.Id);
+                    List<UserModel> list = new List<UserModel>();
+                    DataTable tbl = new DataTable();
+                    MySqlDataReader dr= cmd.ExecuteReader();
+                    tbl.Load(dr);
+                    foreach (DataRow rows in tbl.Rows)
+                    {
+                        UserModel obj = new UserModel() { Id = (int)rows["id"] };
+                        list.Add(obj);
+                    }
+
+                    if (list.Count > 0)
+                    {
+                        return true;
+                    }
+                    else 
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }

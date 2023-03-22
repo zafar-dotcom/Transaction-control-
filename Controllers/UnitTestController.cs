@@ -20,7 +20,10 @@ namespace SendEmailViaSMTP.Controllers
         [HttpPost]
         public IActionResult Insert(UserModel user)
         {
-
+            //if (dal.CheckDuplication(user))
+            //{
+            //    return StatusCode(409); // Conflict - order already exists
+            //}
             if (dal.Add_user(user))
             {
                 return Ok();
